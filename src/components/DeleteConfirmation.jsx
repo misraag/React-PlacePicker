@@ -1,7 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const TIMER = 3000;
 
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
+  const [timeInterval, setTimeInterval] = useState(TIMER)
 
+  //This will show a progress bar in the confirmation dialog.
+  useEffect(()=> {
+    const interval = setInterval(()=>{
+      setTimeInterval((prevTimeInterval) => prevTimeInterval-10);
+    }, 10)
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [])
+  
+  
+  //This will auto close the delete confirmation dialog by accepting.
   useEffect(()=> {
     const timer = setTimeout(()=>{
       console.log("Timer has started")
@@ -15,6 +31,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
  
 
   return (
+    <>
     <div id="delete-confirmation">
       <h2>Are you sure?</h2>
       <p>Do you really want to remove this place?</p>
@@ -27,5 +44,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
         </button>
       </div>
     </div>
+    <progress value={timeInterval} max={TIMER}/>
+    </>
   );
 }
